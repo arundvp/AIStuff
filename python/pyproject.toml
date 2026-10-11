@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
-    { name = "Arunsaravanakumar Ayyasamy", email = "arun.ayyasamy@oracle.com" }
+    { name = "Arun A", email = "arun@arun.com" }
 ]
 requires-python = ">=3.12"
 dependencies = [
