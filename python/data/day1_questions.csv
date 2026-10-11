@@ -1,0 +1,11 @@
+question,expected
+"Red shoes to Boston in 2 days?","product_search|delivery_promise"
+"Do you have the black rain jacket in size M?","stock_check"
+"Where is my order 48213?","order_status"
+"Show me running shoes under $80","product_search"
+"Can I return a blender I bought 40 days ago?","other"
+"Is the blue backpack available at the Dallas warehouse?","stock_check"
+"Gift for my dad under 50 dollars delivered to Chicago by Friday","product_search|delivery_promise"
+"Cancel order 77120","order_status"
+"Why is checkout so slow today?","other"
+"Waterproof hiking boots size 10, need them in Seattle by Tuesday","product_search|delivery_promise"
