@@ -1,0 +1,58 @@
+# CI for the AIStuff monorepo. Runs on every push to main and on every pull request.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least privilege: these jobs only read the code.
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Lint and test (Python)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python   # every "run:" step starts in python/
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false   # don't leave a GitHub token in .git/config
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.11.33"            # same uv version as your laptop and the Dockerfile
+          working-directory: python
+
+      - name: Install dependencies exactly as locked
+        run: uv sync --locked
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Check formatting
+        run: uv run ruff format --check .
+
+      - name: Run tests
+        run: uv run pytest
+
+  image:
+    name: Build the container image (arm64, like the VM)
+    needs: python                       # only build if lint and tests passed
+    runs-on: ubuntu-24.04-arm           # free Arm runner for public repos
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build the image
+        run: docker build -t commerce-router:ci python
+
+      - name: Smoke-test the image
+        run: docker run --rm commerce-router:ci --help
