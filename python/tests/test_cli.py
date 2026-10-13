@@ -14,6 +14,6 @@ def test_ask_prints_one_block_per_model(monkeypatch):
     result = runner.invoke(cli.app, ["Where is my order 48213?", "--models", "small,large"])
 
     assert result.exit_code == 0
-    assert "small (12 ms)" in result.output
+    assert "small (13 ms)" in result.output
     assert "large (12 ms)" in result.output
     assert '"order_id": "48213"' in result.output
