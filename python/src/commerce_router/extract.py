@@ -1,6 +1,8 @@
 import time
 from datetime import date
+
 from ollama import chat
+
 from .schema import ShopperRequest
 
 # Today's date lets the model turn "by Friday" into a number of days.
@@ -14,6 +16,7 @@ Intents:
 - other: anything else (policies, complaints, site problems)
 A question can have several intents. Return only JSON that matches the schema."""
 
+
 def extract(question: str, model: str) -> tuple[ShopperRequest, float]:
     start = time.perf_counter()
     response = chat(
@@ -23,8 +26,8 @@ def extract(question: str, model: str) -> tuple[ShopperRequest, float]:
             {"role": "user", "content": question},
         ],
         format=ShopperRequest.model_json_schema(),  # constrains output to your schema
-        options={"temperature": 0},                 # same input -> same output; best for extraction
-        think=False,                                # Qwen 3.5 thinks by default; we measured that it's slow
+        options={"temperature": 0},  # same input -> same output; best for extraction
+        think=False,  # Qwen 3.5 thinks by default; we measured that it's slow
     )
     ms = (time.perf_counter() - start) * 1000
     result = ShopperRequest.model_validate_json(response.message.content)

@@ -1,7 +1,9 @@
 import typer
+
 from .extract import extract
 
 app = typer.Typer()
+
 
 @app.command()
 def main(question: str, models: str = "qwen3.5:2b,qwen3.5:4b"):
